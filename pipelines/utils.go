@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html"
 	"strings"
 )
 
@@ -13,7 +14,7 @@ func GetOrDefault(data []string, ix int) string {
 }
 
 func CleanString(s string) string {
-	return strings.ReplaceAll(s, "\"", "")
+	return html.UnescapeString(strings.ReplaceAll(s, "\"", ""))
 }
 
 func PrepCsv(s string) ([]string, error) {

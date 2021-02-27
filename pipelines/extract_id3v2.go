@@ -49,7 +49,6 @@ func (s Id3Data) getCols() []string {
 func convTrackpos(pos string) (int, int) {
 	if pos != "" {
 		data := strings.Split(pos, "/")
-		fmt.Println(data)
 		if len(data) > 1 {
 			trck, err1 := strconv.Atoi(data[0])
 			mtrck, err2 := strconv.Atoi(data[1])
