@@ -112,7 +112,7 @@ func parseMp3ToTags(path string) (Id3Data, error) {
 func (f *Id3Data) ProcessElement(path string, emit func(Id3Data)) {
 	data, err := parseMp3ToTags(path)
 	if err != nil {
-		fmt.Printf("Error: %\n", err)
+		fmt.Printf("Error in %v: %v\n", path, err)
 		return
 	}
 	emit(data)
