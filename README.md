@@ -3,6 +3,8 @@ This repository is based on my [Blog](https://chollinger.com/blog), where I buil
 
 *This is a tech-demo*
 
+![docs/architecture.png](docs/architecture.png)
+
 ## Requirements
 - `go`
 - `mysql`/`mariadb`
