@@ -74,7 +74,7 @@ t3 = BashOperator(
     depends_on_past=True,
     bash_command='''
     cd {base}pipelines/
-    go run csv-to-sql.go utils.go \
+    go run csv_to_sql.go utils.go \
 	--track_csv_dir="{out_dir}/csv/*.csv" \
 	--playlist_csv_dir="{out_dir}/playlists/*.csv" \
 	--radio_csv_dir="{out_dir}/clean/radios/*.csv" \

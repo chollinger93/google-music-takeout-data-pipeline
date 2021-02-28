@@ -1,10 +1,10 @@
 [fs]
 # Export directory
-baseDir="/home/user/GooglePlayMusic/Takeout/Google Play Music/"
+baseDir=/home/user/GooglePlayMusic/Takeout/Google Play Music/
 # Target/Output directory
-targetDir="/home/user/clean/"
+targetDir=/home/user/clean/
 # Where you keep your Music
-masterDir="/home/user/Music/"
+masterDir=/home/user/Music/
 
 [sql]
 # MariaDB Database
