@@ -89,16 +89,16 @@ t3 = BashOperator(
 t4 = BashOperator(
     task_id='create_flat_list_incoming',
     depends_on_past=True,
-    bash_command='find {out_dir}/mp3 -type f -name "*.mp3" > all_mp3.txt'
-        .format(out_dir=config['fs']['targetDir']),
+    bash_command='find {out_dir}/mp3 -type f -name "*.mp3" > {out_dir}/all_mp3.txt'
+        .format(out_dir=config['fs']['targetDir'], out_dir=config['fs']['targetDir']),
     dag=dag,
 )
 
 t5 = BashOperator(
     task_id='create_flat_list_master',
     depends_on_past=True,
-    bash_command='find {master_dir}/mp3 -type f -name "*.mp3" > all_mp3.txt'
-        .format(master_dir=config['fs']['masterDir']),
+    bash_command='find {master_dir}/ -type f -name "*.mp3" > {out_dir}/all_mp3_master.txt'
+        .format(master_dir=config['fs']['masterDir'], out_dir=config['fs']['targetDir']),
     dag=dag,
 )
 
@@ -111,7 +111,7 @@ t6 = BashOperator(
 	--mp3_list="{out_dir}/all_mp3_master.txt" \
 	--database_host={dbHost} \
 	--database_user={dbUser} \
-	--database_password="{dbPw}"
+	--database_password="{dbPw} | grep "unsupported version of ID3" >> {out_dir}/unsup.txt"
     '''.format(base=BASE_PATH, out_dir=config['fs']['targetDir'], 
         dbHost=config['sql']['dbHost'], dbUser=config['sql']['dbUser'], dbPw=config['sql']['dbPw']),
     dag=dag,
