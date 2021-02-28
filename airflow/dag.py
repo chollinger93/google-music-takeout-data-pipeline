@@ -90,7 +90,7 @@ t4 = BashOperator(
     task_id='create_flat_list_incoming',
     depends_on_past=True,
     bash_command='find {out_dir}/mp3 -type f -name "*.mp3" > {out_dir}/all_mp3.txt'
-        .format(out_dir=config['fs']['targetDir'], out_dir=config['fs']['targetDir']),
+        .format(out_dir=config['fs']['targetDir']),
     dag=dag,
 )
 
@@ -103,7 +103,7 @@ t5 = BashOperator(
 )
 
 t6 = BashOperator(
-    task_id='beam_extract_id3v2',
+    task_id='beam_extract_id3v2_master',
     depends_on_past=True,
     bash_command='''
     cd {base}pipelines/
@@ -111,11 +111,29 @@ t6 = BashOperator(
 	--mp3_list="{out_dir}/all_mp3_master.txt" \
 	--database_host={dbHost} \
 	--database_user={dbUser} \
-	--database_password="{dbPw} | grep "unsupported version of ID3" >> {out_dir}/unsup.txt"
+    --database=googleplay_master \
+	--database_password="{dbPw} | grep "unsupported version of ID3" >> {out_dir}/unsup-raw.txt"
     '''.format(base=BASE_PATH, out_dir=config['fs']['targetDir'], 
         dbHost=config['sql']['dbHost'], dbUser=config['sql']['dbUser'], dbPw=config['sql']['dbPw']),
     dag=dag,
 )
 
+
+t7 = BashOperator(
+    task_id='beam_extract_id3v2_raw',
+    depends_on_past=True,
+    bash_command='''
+    cd {base}pipelines/
+    go run extract_id3v2.go utils.go \
+	--mp3_list="{out_dir}/all_mp3.txt" \
+	--database_host={dbHost} \
+	--database_user={dbUser} \
+	--database_password="{dbPw} | grep "unsupported version of ID3" >> {out_dir}/unsup-master.txt"
+    '''.format(base=BASE_PATH, out_dir=config['fs']['targetDir'], 
+        dbHost=config['sql']['dbHost'], dbUser=config['sql']['dbUser'], dbPw=config['sql']['dbPw']),
+    dag=dag,
+)
+
+
 # Graph goes brr
-m1 >> t1 >> t2 >> t3 >> t4 >> t5 >> t6
+m1 >> t1 >> t2 >> t3 >> t4 >> t5 >> [t6, t7]
